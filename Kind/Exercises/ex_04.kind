@@ -1,29 +1,56 @@
 // Basic exercises involving Lists
 
-type List <A: Type> {
-  nil
-  cons(head: A, tail: List<A>)
-}
+// type List <A: Type> {
+//   nil
+//   cons(head: A, tail: List<A>)
+// }
 
 // Returns the list without the first element
 tail<A: Type>(xs: List<A>): List<A>
-  ?a
+  case xs {
+    nil: List.nil<A>
+    cons: xs.tail
+  }
 
 // Returns the length of a list
 length<A: Type>(xs: List<A>): Nat
-  ?a
+  case xs {
+    nil: Nat.zero
+    cons: Nat.succ(length<A>(xs.tail))
+  }
 
 // Concatenates two lists
 concat<A: Type>(xs: List<A>, ys: List<A>): List<A>
-  ?a
+  case xs {
+    nil: ys
+    cons: List.cons<A>(xs.head, concat<A>(xs.tail, ys))
+  }
 
 // Applies a function to all elements of a list
 map<A: Type, B: Type>(fn: A -> B, xs: List<A>): List<B>
-  ?a
+  case xs {
+    nil: List.nil<B>
+    cons: List.cons<B>(fn(xs.head), map<A, B>(fn, xs.tail))
+  }
 
 // Returns the same list, with the order reversed
 reverse<A: Type>(xs: List<A>): List<A>
-  reverse.go<A>(List.nil<A>, xs)
+  reverse.go<A>(xs, List.nil<A>)
 
-reverse.go<A: Type>(new_list: List<A>, old_list: List<A>): List<A>
-  ?r
+reverse.go<A: Type>(xs: List<A>, ys: List<A>): List<A>
+  case xs {
+    nil: ys
+    cons: reverse.go<A>(xs.tail, List.cons<A>(xs.head, ys))
+  }
+
+// Para cada elemento na lista xs, adicionar xs.head em ys
+// reverse.go<A>(xs.tail, List.cons<A>(xs.head, ys.tail))
+
+// []
+// [1]
+// [2, 1]
+// [3, 2, 1]
+
+// [1, 2, 3]
+// [2, 3, 1]
+// [3, 2, 1]

@@ -1,29 +1,40 @@
-// Basic Exercises involving Bools
-
-type Bool {
-  true
-  false
-}
+// type Bool {
+//   true
+//   false
+// }
 
 // Negation
 // Returns the opposite of a Bool
-neg(b: Bool): Bool 
-
-  ?n
+neg(b: Bool): Bool
+  case b {
+    false: Bool.true
+    true: Bool.false
+  }
 
 // And
 // Returns true if both inputs are true
 and(a: Bool, b: Bool): Bool
-
-  ?a
+  case a b {
+    true true: Bool.true
+  } default Bool.false
 
 // Or
 // Returs true if any input is true
 or(a: Bool, b: Bool): Bool
-
-  ?o
+  case a b {
+    false false: Bool.false
+  } default Bool.true
 
 // Equal
 // Returs true if both inputs are identical
 eql(a: Bool, b: Bool): Bool
-  ?e
+  case a b {
+    true true: Bool.true
+    false false: Bool.true
+  } default Bool.false
+
+ex_00:_
+  // neg(Bool.true)
+  // and(Bool.true, Bool.true)
+  // or(Bool.true, Bool.false)
+  // eql(Bool.true, Bool.true)

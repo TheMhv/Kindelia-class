@@ -1,50 +1,72 @@
 // Advanced exercises involving recursion
 
-type Nat {
-  zero
-  succ(pred: Nat)
-}
+// type Nat {
+//   zero
+//   succ(pred: Nat)
+// }
 
 // Doubles a number
 dbl(a: Nat): Nat // double
-
-  ?b
+  case a {
+    zero: Nat.zero
+    succ: Nat.succ(Nat.succ(dbl(a.pred)))
+  }
 
 // Addition
 add(a: Nat, b: Nat): Nat
-
-  ?a
+  case a {
+    zero: b
+    succ: add(a.pred, Nat.succ(b))
+  }
 
 // Multiplication
+// 2 * 3 = 6
+// 3 * 3 = 9
 mul(a: Nat, b: Nat): Nat
-  
-  ?m
+  case a {
+    zero: Nat.zero
+    succ: add(b, mul(a.pred, b))
+  }
 
 // Subtraction
 // 4 - 5 = 0
 // 5 - 4 = 1
 sub(a: Nat, b: Nat): Nat
-
-  ?s
+  case a b {
+    zero succ: b
+    succ succ: Nat.succ(sub(a.pred, b.pred))
+  } default Nat.zero
 
 // Factorial
 // 4! = 24
-fac(a: Nat): Nat 
-  
-  ?f
+fac(a: Nat): Nat
+  case a {
+    zero: Nat.succ(Nat.zero)
+    succ: case a.pred {
+      zero: a
+      succ: mul(a, fac(a.pred))
+    }
+  }
 
 // Division
 // 1 / 2 = 0
 // x / 0 = 0
 // 5 / 2 = 2
 div(a: Nat, b: Nat): Nat // division
-  
-  ?d
+  case b {
+    zero: Nat.zero
+    succ: case b.pred {
+      zero: div(sub(a, b), b.pred)
+      succ: Nat.succ(div(sub(a, b), b.pred))
+    }
+  }
 
 // Equal
 eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the same and false if they are different.
-  
-  ?e 
+  case a b {
+    succ succ: eql(a.pred, b.pred)
+    zero zero: Bool.true
+  } default Bool.false
 
 // Do not use the "not" function to create the functions below
 
@@ -52,13 +74,16 @@ eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the s
 // 2 > 1 = True
 // 3 > 3 = False
 gtn(a: Nat, b: Nat): Bool // if A > B == True else false
-  
-  ?g
+  case a b {
+    succ succ: gtn(a.pred, b.pred)
+    succ zero: Bool.true
+  } default Bool.false
 
 // Lower than
 // 1 < 2 = True
 // 3 < 3 = False
-ltn(a: Nat, b: Nat): Bool // if A > B == False else true 
-  
-  ?l
-
+ltn(a: Nat, b: Nat): Bool // if A > B == False else true
+  case a b {
+    succ succ: ltn(a.pred, b.pred)
+    succ zero: Bool.false
+  } default Bool.true

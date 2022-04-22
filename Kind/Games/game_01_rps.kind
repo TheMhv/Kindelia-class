@@ -1,5 +1,6 @@
 // Play options
 type Object {
+  undefined
   rock
   paper
   scissors
@@ -7,43 +8,98 @@ type Object {
 
 // Converts a text to an Object. If not possible, returns rock
 Object.read(code: String): Object
-  ?a
+  switch String.eql_no_sensitive(code) {
+    "rock": Object.rock
+    "paper": Object.paper
+    "scissors": Object.scissors
+  } default Object.undefined
 
 // Converts a number to an Object. If not possible, returns rock
 Object.from_nat(n: Nat): Object
-  ?b
+  switch Nat.eql(n) {
+    0: Object.rock
+    1: Object.paper
+    2: Object.scissors
+  } default Object.undefined
+
+// Converts a Object to an String.
+Object.to_string(obj: Object): String
+  case obj {
+    undefined: "undefined"
+    rock: "rock"
+    paper: "paper"
+    scissors: "scissors"
+  }
+
+// Check if Object is valid
+Object.check_obj(obj: Object): Bool
+  case obj {
+    undefined: Bool.false
+  } default Bool.true
 
 // Checks if Object a beats Object b
 // Draw = false
-Object.wins(a: Object, b: Object): Bool
-  ?c
+Object.wins(a: Object, b: Object): Nat
+  case a b {
+    rock rock: 0
+    paper paper: 0
+    scissors scissors: 0
+    rock scissors: 1
+    scissors paper: 1
+    paper rock: 1
+  } default 2
 
 // If wins, return "Você ganhou" else "Você perdeu"
-Object.match_result(win: Bool): String
-  ?d
+Object.match_result(win: Nat): String
+  switch Nat.eql(win) {
+    1: "You won! :D"
+    2: "You tried... :("
+  } default "Wow, a draw! :O"
 
-Test: IO(Unit)
+// If choice "yes", return true
+Object.play_again(choice: String): Bool
+  switch String.eql_no_sensitive(choice) {
+    "yes": Bool.true
+    "y": Bool.true
+  } default Bool.false
+
+// Game run
+game_01_rps: IO(Unit)
   IO {
     IO.print("Pick one: rock, paper or scissors")
     // Asks for user input and saves it in variable line
     get user_input = IO.get_line
 
     // Converts the user_input (String) to the Object type
-    let user_object = ?e
+    let user_object = Object.read(user_input)
 
-    // Number = Random -> 0, 1, 2
-    get random_num = IO.random(3)
+    if Bool.not(Object.check_obj(user_object)) then
+      IO.print("Sorry! This input is not valid.")
+    else IO {
+      // Number = Random -> 0, 1, 2
+      get random_num = IO.random(3)
 
-    // Converts random_num (Nat) to the Object type
-    let cpu_object = ?f
+      // Converts random_num (Nat) to the Object type
+      let cpu_object = Object.from_nat(random_num)
 
-    // Compares user_object and cpu_object and returns true if user wins
-    let user_won = ?g
+      // Print the cpu Object choice
+      IO.print(Object.to_string(cpu_object))
 
-    // Final message to be said: "You won" or "You lost"
-    let final_message = ?h
+      // Compares user_object and cpu_object and returns true if user wins
+      let user_won = Object.wins(user_object, cpu_object)
 
-    IO.print(final_message)
+      // Final message to be said: "You won" or "You lost"
+      let final_message = Object.match_result(user_won)
 
-    Test
+      IO.print(final_message)
+    }
+
+    IO.print("Try again?")
+
+    get try_again = IO.get_line
+
+    if (Object.play_again(try_again)) then
+      game_01_rps
+    else
+      IO.print("Thx for playing my game! =)")
   }
