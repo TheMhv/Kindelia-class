@@ -15,7 +15,7 @@ type TicTacToe {
 // Example of a finished game
 // TicTacToe.new(
 //   7,
-//   [ 
+//   [
 //     [some(TicTacToe.Piece.X), some(TicTacToe.Piece.X), some(TicTacToe.Piece.O)],
 //     [none                   , some(TicTacToe.Piece.X), some(TicTacToe.Piece.O)],
 //     [none                   , some(TicTacToe.Piece.O), some(TicTacToe.Piece.X)]
@@ -26,58 +26,297 @@ type TicTacToe {
 // The initial board state
 // An empty board
 TicTacToe.init: TicTacToe
-  ?a
+  TicTacToe.new(Nat.zero,
+    [
+      [none, none, none],
+      [none, none, none],
+      [none, none, none]
+    ]
+  )
 
 // Gets the state of a given position in the board
 // x = row
 // y = column
+
+// TicTacToe.get(x: Nat, y: Nat, game: TicTacToe): Maybe<TicTacToe.Piece>
+//   case TicTacToe.get.readList<List<Maybe<TicTacToe.Piece>>>(y, game@board) as column {
+//     none: none
+//     some: case TicTacToe.get.readList<Maybe<TicTacToe.Piece>>(x, column.value) as row {
+//       none: none
+//       some: row.value
+//     }
+//   }
+
+
+// TicTacToe.get.readList<A: Type>(index: Nat, list: List<A>): Maybe(A)
+//   case list {
+//     nil: Maybe.none<A>
+//     cons: case index {
+//       zero: Maybe.some<A>(list.head)
+//       succ: TicTacToe.get.readList<A>(index.pred, list.tail)
+//     }
+//   }
+
 TicTacToe.get(x: Nat, y: Nat, game: TicTacToe): Maybe<TicTacToe.Piece>
-  ?b
+  let column = game@board[y] <> List.nil<Maybe<TicTacToe.Piece>>
+  let tile = column[x] <> Maybe.none<TicTacToe.Piece>
+  tile
+
+// O tipo A deverá ser List<Maybe<TicTacToe.Piece>> quando receber y
+// O tipo A deverá ser Maybe<TicTacToe.Piece> quando receber x
+
+// TicTacToe.get(1, 1, [[X, X, O], [O, O, X], [X, O, X]]) => O
+
+// ============= //
+
+// Para cada y, pula um game.board.head (game.board.tail)
+// TicTacToe.get(1, 0, [[O, O, X], [X, O, X]])
+// Quando y for 0, entra no game.board.head
+
+// Para cada x, pula um game.board.head.head (game.board.head.tail)
+// TicTacToe.get(0, 0, [[O, X], [X, O, X]])
+// Quando x for 0, entra no game.board.head.head
+
+// ============= //
+
+// Para cada y, pula um elemento da lista game.board
+// game.board => [y0, y1, y2]
+
+// Para cada x, pula um elemento da lista y selecionada
+// y => [x0, x2, x3]
+
+// game.board [
+//   y0[x0, x1, x2],
+//   y1[x0, x1, x2],
+//   y2[x0, x1, x2]
+// ]
+
+// ========================================================== //
 
 // If possible, converts the user input to a coordinate {x, y}
 // A valid inputs is any pair of 2 numbers separated with a space:
 // "0 2"
 // "4 4"
+// "44 33"
 // Invalid inputs:
 // "banana"
 // "   "
 TicTacToe.read(input: String): Maybe<Pair<Nat, Nat>>
-	?c
+  let digits =  List.filter<String>((x) Bool.not(String.eql("", x)), String.split(input, " "))
+
+  case digits { // List<String>
+    nil: none
+    cons: case digits.head { // String
+      nil: none
+      cons: case digits.tail { // String
+        nil: none
+        cons:
+        Maybe.some<Pair<Nat, Nat>>(
+          Pair.new<Nat, Nat>(
+            Nat.read(digits.head),
+            Nat.read(digits.tail.head)
+          )
+        )
+      }
+    }
+  }
+
+  // let digit1 = Nat.read(digits[0])
+  // let digit2 = Nat.read(digits[1])
+  // let digits = Pair.new<Nat, Nat>(digit1, digit2)
+  // Maybe.some<Pair<Nat, Nat>>(digits)
+
+// "0 2"              => some({0, 2})
+
+// ["0", " ", "2"]    => String.split(input, " ")
+// ["0", "2"]         => Nat.read(digits.head)
+// [0, 2]             => Pair.new(digit[0], digit[1])
+// {0, 2}             => Maybe.some<Pair<Nat, Nat>>(Pair.new(Nat.read(digits.head), Nat.read(digits.tail.head)))
+// some({0, 2})
+
+// ================================================================================== //
 
 // Checks if a movement is valid
 // A valid movement is any movement inside the 3x3 board if the tile is unnocupied
 TicTacToe.is_move_valid(coord: Pair<Nat, Nat>, game: TicTacToe): Bool
-	?d
+	case coord {
+    new: case TicTacToe.get(coord.fst, coord.snd, game) {
+      none: Bool.true
+      some: Bool.false
+    }
+  }
+
+// [
+//   [X, O, X],
+//   [X, X, O],
+//   [O, O, X]
+// ]
 
 // Who is the next one to play?
 TicTacToe.next_piece(game: TicTacToe): TicTacToe.Piece
-  ?e
+  if (Nat.odd(game@turn)) then
+    TicTacToe.Piece.O
+  else
+    TicTacToe.Piece.X
 
+// turn 0 => X
+// turn 1 => O
+// turn 2 => X
+// turn 3 => O
+
+// [
+//   [X, none,  X],
+//   [O, none,  none],
+//   [O, X,     X]
+// ]
+
+TicTacToe.list.replace<A: Type>(set: A, index: Nat, xs: List<A>): List<A>
+  case xs {
+      nil: List.nil<A>
+      cons: case index {
+        zero: List.cons<A>(set, xs.tail)
+        succ: List.cons<A>(xs.head, TicTacToe.list.replace<A>(set, index.pred, xs.tail))
+      }
+  }
 
 // From an input, adds X or O (decided from TicTacToe.next_piece) at given location and increments the turn
 TicTacToe.move(coord: Pair<Nat, Nat>, game: TicTacToe): TicTacToe
-  ?f
+  let new_tile = Maybe.some<TicTacToe.Piece>(TicTacToe.next_piece(game))
+
+  case game {
+    new: case coord {
+      new:
+        let column = game.board[coord.snd] <> List.nil<Maybe<TicTacToe.Piece>>
+        let new_column = TicTacToe.list.replace<Maybe<TicTacToe.Piece>>(new_tile, coord.fst, column)
+        let new_board = TicTacToe.list.replace<List<Maybe<TicTacToe.Piece>>>(new_column, coord.snd, game.board)
+        TicTacToe.new(Nat.succ(game.turn), new_board)
+    }
+  }
+
+// TicTacToe.move({1, 1}, (0, [[none, none, none], [none, none, none], [none, none, none]]))
+
+// game.turn => 0
+// game.board => [[none, none, none], [none, none, none], [none, none, none]]
+
+// adiciona peça no local
+// Até y = 0 pula game.board.head
+// Até x = 0 pula y.head
+// seta o local com TicTacToe.next_piece(game)
+
+// let column = game.board[y]
+// let location = column[x] => some(TicTacToe.next_piece)
+
+// TicTacTow.new(Nat.succ(game.turn), board)
 
 // Checks if 2 pieces are equal
 TicTacToe.Piece.eql(a: Maybe<TicTacToe.Piece>, b: Maybe<TicTacToe.Piece>): Bool
-	?g
+  without a: Bool.false
+  without b: Bool.false
+  case a b {
+    X X: Bool.true
+    O O: Bool.true
+  } default Bool.false
 
 // Determines a winner if there is one
 TicTacToe.winner(game: TicTacToe): Maybe<TicTacToe.Piece>
-  ?h
+  // open game
+  // if Nat.ltn(game.turn, 5) then Maybe.none<TicTacToe.Piece> else
+  // open game.board
+  ?ahhahah
+  // case TicTacToe.Piece.eql(game.board.head, TicTacToe.check.column(game.board.tail)) {
+  //   true: game.board.head
+  //   false: none
+  // }
+
+  // TicTacToe.winner(TicTacToe.new(game.turn, game.board.tail))
+// [  4° 5° 6°  7°
+//   [X, X, O], 1°
+//   [O, O, X], 2°
+//   [X, O, X]  3°
+// ]            8°
+
+// y = colunas dentro de game.board (game.board.head)
+// x = valores dentro de y (game.board.head.head)
+// z = index de x em y
+
+// Checa se todos elementos da lista são iguais (checa se a fileira é win)
+TicTacToe.check.row(xs: List<Maybe<TicTacToe.Piece>>): Maybe<TicTacToe.Piece>
+  case xs {
+    nil: none
+    cons: case xs.tail {
+      nil: xs.head
+      cons: case TicTacToe.Piece.eql(xs.head, TicTacToe.check.row(xs.tail)) {
+        true: xs.head
+        false: none
+      }
+    }
+  }
+// TicTacToe.check.row([some(TicTacToe.Piece.X), some(TicTacToe.Piece.X), some(TicTacToe.Piece.X)])
+
+// Checa se o elemento na posição é igual elemento de mesma posição na próxima fileira
+TicTacToe.check.column(index: Nat, xs: List<List<Maybe<TicTacToe.Piece>>>): Maybe<TicTacToe.Piece>
+  case xs {
+    nil: none
+    cons: case xs.head { // => [some(X), some(X), some(O)]
+      nil: none
+      cons: case index {
+        zero: xs.head.head
+        succ: case TicTacToe.Piece.eql(
+          TicTacToe.check.column(index.pred, List.cons<List<Maybe<TicTacToe.Piece>>>(xs.head.tail, xs.tail)),
+          TicTacToe.check.column(index, xs.tail)
+        ) {
+          true: xs.head.head
+          false: none
+        }
+      }
+    }
+  }
+game_02_ttt:_
+  TicTacToe.check.column(0, [
+    [some(TicTacToe.Piece.X), some(TicTacToe.Piece.X), some(TicTacToe.Piece.O)],
+    [some(TicTacToe.Piece.X), some(TicTacToe.Piece.O), some(TicTacToe.Piece.O)],
+    [some(TicTacToe.Piece.X), some(TicTacToe.Piece.O), some(TicTacToe.Piece.X)]
+  ])
+
+
+// y = List<List<Maybe<TicTacToe.Piece>>>
+// No y.head e y.head.head, checa se y.head.head é igual ao y.tail[y.head.tail.head]
+
+TicTacToe.check.diagonal(xs: List<List<Maybe<TicTacToe.Piece>>>): Maybe<TicTacToe.Piece>
+  open xs
+  case xs.head
+
+  // 00
+  // 11
+  // 22
+
+  // 02
+  // 11
+  // 20
+
+// game_02_ttt:_
+//   TicTacToe.check.diagonal(0, [
+//     [some(TicTacToe.Piece.X), some(TicTacToe.Piece.X), some(TicTacToe.Piece.O)],
+//     [some(TicTacToe.Piece.X), some(TicTacToe.Piece.O), some(TicTacToe.Piece.O)],
+//     [some(TicTacToe.Piece.X), some(TicTacToe.Piece.O), some(TicTacToe.Piece.X)]
+//   ])
 
 // Converts the piece into a text to be shown
 TicTacToe.Piece.show(a: Maybe<TicTacToe.Piece>): String
-  ?i
+  without a: ""
+  case a {
+    X: "X"
+    O: "O"
+  }
 
 // Shows the board
 // Example:
 //
-//  X | X | O 
+//  X | X | O
 // -----------
-//  O | O | X 
+//  O | O | X
 // -----------
-//  X | O | X 
+//  X | O | X
 //
 TicTacToe.show(game: TicTacToe): String
   ?j
@@ -92,28 +331,28 @@ Test: IO<Unit>
   }
 
 
-// Do not edit below this line 
+// Do not edit below this line
 TicTacToe.play(game: TicTacToe): IO<Unit>
   IO {
     IO.print("Where do you wanna move?")
     // Receives user input
     get line = IO.get_line
-    
+
 		// Converts input into coordinates
 		let coords = TicTacToe.read(line)
 
-		get game = 
+		get game =
 			case coords {
 				none: IO {
 					IO.print("Invalid entry")
 					return game
-				}	
+				}
 				some:
 					// Checks if a movement is valid
 					let is_move_valid = TicTacToe.is_move_valid(coords.value, game)
 
 					if is_move_valid then IO {
-						// Returns the game after 
+						// Returns the game after
 						let new_game = TicTacToe.move(coords.value, game)
 						return new_game
 					}
@@ -131,12 +370,12 @@ TicTacToe.play(game: TicTacToe): IO<Unit>
     open game
 
     // If there is no winner, checks if its a draw
-    case Winner { 
-      none: 
+    case Winner {
+      none:
         if Nat.eql(game.turn, 9) then
           IO.print("Draw!")
         else TicTacToe.play(game)
-      some: case Winner.value { 
+      some: case Winner.value {
         X: IO.print("X Wins!")
         O: IO.print("O Wins!")
       }
