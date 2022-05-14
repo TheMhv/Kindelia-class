@@ -17,14 +17,31 @@
 // Operação lógica de negação
 // (Not x)
 
+(Not True) = False
+(Not False) = True
+
 // Operação lógica de igualdade
 // (Equal x y)
+
+(Equal x x) = True
+(Equal y y) = True
+(Equal x y) = False
 
 // Operação lógica E
 // (And x y)
 
+(And True True) = True
+(And x y) = False
+
 // Operação lógica OU
 // (Or x y)
 
+(Or False False) = False
+(Or x y) = True
+
 // Operação lógica OU Exclusivo
 // (Xor x y)
+
+(Xor False False) = False
+(Xor True True) = False
+(Xor x y) = True

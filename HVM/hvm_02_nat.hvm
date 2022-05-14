@@ -18,20 +18,50 @@
 // Retorna o antecessor do número
 // (Pred x)
 
+(Pred Z) = Z
+(Pred (S x)) = x
+
 // Retorna o dobro do número
 // (Dobro x)
+
+(Dobro Z) = Z
+(Dobro (S x)) = (S (S (Dobro x)))
 
 // Retorna metade (arredondado pra baixo) do número
 // (Metade x)
 
+(Metade Z) = Z
+(Metade (S (S x))) = x
+
 // Retorna a adição de dois números
 // (Add x y)
+
+(Add Z Z) = Z
+(Add Z y) = y
+(Add x Z) = x
+(Add x (S y)) = (S (Add x y))
+
+(Main) = (Add (S (S (Z))) (S (S (S (Z)))))
+
+
+// 3 + 3 => 6
+// 2 + 4 => 6
+// 0 + 6 => 6
 
 // Retorna a subtração de dois números (0 se seria negativo)
 // (Sub x y)
 
+(Sub Z Z) = Z
+(Sub x Z) = x
+(Sub (S x) (S y)) = (Sub x y)
+
 // Retorna a multiplicação de dois números
 // (Mul x y)
+
+(Mul Z Z) = Z
+(Mul x Z) = x
+(Mul Z y) = Z
+(Mul x (S y)) = (Mul (Add x x) y)
 
 // Retorna o fatorial de um número
 // (Fat x)
