@@ -1,111 +1,24 @@
-// Advanced exercises involving Lists
+// Basic Exercises involving Pairs
 
-// type List <A: Type> {
-//   nil
-//   cons(head: A, tail: List<A>)
-// }
+type Pair <A: Type, B: Type> {
+  new(fst: A, snd: B)
+}
 
-// type Maybe <A: Type> {
-//   none
-//   some(value: A)
-// }
-
-// Returns pairs of the elements of the 2 input lists on the same index
-// Ex: zip!!([1,2], ["a","b","c"]) == [{1, "a"}, {2 , "b"}]
-// Ex: zip!!(["a", "b"], [3, 5])   == [{"a", 3}, {2 , "b"}]
-zip<A: Type, B: Type>(xs: List<A>, ys: List<B>): List<Pair<A,B>>
-  case xs ys {
-    cons cons: List.cons<Pair<A,B>>(Pair.new<A,B>(xs.head, ys.head), zip<A,B>(xs.tail, ys.tail))
-  } default List.nil<Pair<A,B>>
-
-// Returns the smallest element of a List
-smallest(xs: List<Nat>): Nat
-  case xs {
-    nil: Nat.zero
-    cons: case xs.tail {
-      nil: xs.head
-      cons: Nat.min(xs.head, smallest(xs.tail))
-    }
+// Example:
+// Swaps the elements of a pair
+swap<A: Type, B: Type>(pair: Pair<A,B>): Pair<B,A>
+  case pair {
+    new: Pair.new<B, A>(pair.snd, pair.fst)
   }
 
-// Returns the same list without the smallest element
-delete_smallest(xs: List<Nat>): List<Nat>
-  case xs {
-    nil: List.nil<Nat>
-    cons: case xs.tail {
-      nil: List.nil<Nat>
-      cons: case Nat.ltn(xs.head, xs.tail.head) {
-        false: List.cons<Nat>(xs.head, delete_smallest(xs.tail))
-        true: List.cons<Nat>(xs.tail.head, delete_smallest(List.cons<Nat>(xs.head, xs.tail.tail)))
-      }
-    }
-  }
+// Returns the first element of a pair
+first<A: Type, B: Type>(pair: Pair<A,B>): A
+  ?a
 
-// Returns the same list, in ascending order
-sort_ascending(xs: List<Nat>): List<Nat>
-  case xs {
-    nil: List.nil<Nat>
-    cons: case xs.tail {
-      nil: xs
-      cons: case Nat.ltn(xs.head, xs.tail.head) {
-        false: sort_ascending(List.cons<Nat>(xs.tail.head, List.cons<Nat>(xs.head, xs.tail.tail)))
-        true: List.cons<Nat>(xs.head, sort_ascending(sort_ascending(xs.tail)))
-      }
-    }
-  }
+// Returns the second element of a pair
+second<A: Type, B: Type>(pair: Pair<A,B>): B
+  ?a
 
-// [9, 2, 8, 6] => 9 < 2                => [2, 9, 8, 6]
-// [2, 9, 8, 6] => 2 < 9, 9 < 8         => [2, 8, 9, 6]
-// [2, 8, 9, 6] => 2 < 8, 8 < 9, 9 < 6  => [2, 8, 6, 9]
-// [2, 8, 6, 9] => 2 < 8, 8 < 6         => [2, 6, 8, 9]
-// [2, 6, 8, 9] => 2 < 8, 6 < 8, 8 < 9  => [2, 6, 8, 9]
-
-// Returns an element at an index from the list
-// if there is an element at that index
-//   returns Maybe.some!(element)
-// else
-//   returns Maybe.none!
-get<A: Type>(idx: Nat, xs: List<A>): Maybe<A>
-  case xs {
-    nil: Maybe.none<A>
-    cons: case idx {
-      zero: Maybe.some<A>(xs.head)
-      succ: get<A>(idx.pred, xs.tail)
-    }
-  }
-
-// 2, ["a", "b", "c"] => "b"
-
-// Para cada idx, pular o xs.head
-// 2, ["a", "b", "c"]
-// 1, ["b", "c"]
-// 0, "b"
-
-// Removes all elements that does not match a condition
-// List.filter<Nat>(Nat.odd, [1, 2, 3, 4, 5]) = [1, 3, 5]
-filter<A: Type>(f: A -> Bool, xs: List<A>): List<A>
-  case xs {
-    nil: List.nil<A>
-    cons: case f(xs.head) {
-      true: List.cons<A>(xs.head, filter<A>(f, xs.tail))
-      false: filter<A>(f, xs.tail)
-    }
-  }
-
-// Nat.odd, [1, 2, 3, 4, 5] = [1, 3, 5]
-
-// Para cada elemento em xs, executar a função.
-// Se a função retornar false pula-o
-// Nat.odd(1) => true   => [1]
-// Nat.odd(2) => false  => [1]
-// Nat.odd(3) => true   => [1, 3]
-// Nat.odd(4) => false  => [1, 3]
-// Nat.odd(5) => true   => [1, 3, 5]
-
-ex_05: _
-  // List.show!(Pair.show<Nat, String>(Nat.show, String.show), zip<Nat, String>([1, 2], ["a", "b"]))
-  // smallest([2, 3])
-  // List.show<Nat>(Nat.show, delete_smallest([3, 4, 2, 5]))
-  // List.show<Nat>(Nat.show, sort_ascending([9, 2, 8, 6]))
-  // get<String>(1, ["a", "b", "c"])
-  List.show<Nat>(Nat.show, filter<Nat>(Nat.odd, [1, 2, 3, 4, 5]))
+// Applies a function to both elements of a Pair
+map<A: Type, B: Type>(fn: A -> B, pair: Pair<A,A>): Pair<B,B>
+  ?a
