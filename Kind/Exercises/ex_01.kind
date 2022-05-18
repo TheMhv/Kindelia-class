@@ -1,30 +1,37 @@
-// type Nat {
-//   zero
-//   succ(pred: Nat)
-// }
+// type MaybeBool
+// It maybe holds a Boolean inside it
+type MaybeBool {
+  none
+  some(value: Bool)
+ }
 
-// Increment
-// 2 + 1 = 3
-// 0 + 1 = 1
-inc(a: Nat): Nat
-  Nat.succ(a)
+// Returns true if Maybe is none
+is_none(a: MaybeBool): Bool
+  ?a
 
-// Decrement
-// 2 - 1 = 1
-// 0 - 1 = 0
-dec(a: Nat): Nat
-  case a {
-    zero: Nat.zero
-    succ: a.pred
-  }
+// Returns true if Maybe is some
+is_some(a: MaybeBool): Bool
+  ?b
 
-is_zero(a: Nat): Bool
-  case a {
-    zero: Bool.true
-    succ: Bool.false
-  }
+// Returns true if both inputs are identical
+// eql(MaybeBool.none,             MaybeBool.none            ) -> true
+// eql(MaybeBool.some(Bool.false), MaybeBool.none            ) -> false
+// eql(MaybeBool.some(Bool.true),  MaybeBool.some(Bool.false)) -> false
+// eql(MaybeBool.some(Bool.false), MaybeBool.some(Bool.false)) -> true
+eql(a: MaybeBool, b: MaybeBool): Bool
+  ?c
 
-ex_01:_
-  // inc(1)
-  // dec(1)
-  // is_zero(0)
+// Returns the value inside the MaybeBool.
+// If there is no value contained, returns v instead
+extract(a: MaybeBool, v: Bool): Bool
+  ?d
+
+// Create a MaybeBool from a Boolean
+// create(Bool.false) -> MaybeBool(Bool.false)
+create(a:Bool): MaybeBool
+  ?e
+
+// Returns the first input that is a MaybeBool.some
+// Returns MaybeBool.none if both are MaybeBool.none
+or(a: MaybeBool, b: MaybeBool) : MaybeBool
+  ?f
