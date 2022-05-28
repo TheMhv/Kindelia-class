@@ -8,11 +8,17 @@ type Bool {
 // Is true
 // Returns true if input is true
 is_true(a: Bool): Bool
+<<<<<<< HEAD
   a
+=======
+  ?a 
+
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // Is false
 // Returns true if input is false
 is_false(a: Bool): Bool
+<<<<<<< HEAD
   case a {
     true: Bool.false
     false: Bool.true
@@ -25,49 +31,78 @@ neg(b: Bool): Bool
     true: Bool.false
     false: Bool.true
   }
+=======
+  ?b
+
+// Negation
+// Returns the opposite of a Bool
+neg(b: Bool): Bool 
+  ?c
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // And
 // Returns true if both inputs are true
 and(a: Bool, b: Bool): Bool
+<<<<<<< HEAD
   case a b {
     true true: Bool.true
   } default Bool.false
+=======
+  ?d
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // Or
 // Returs true if any input is true
 or(a: Bool, b: Bool): Bool
+<<<<<<< HEAD
   case a {
     true: Bool.true
     false: b
   }
+=======
+  ?e
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // Equal
 // Returs true if both inputs are identical
 eql(a: Bool, b: Bool): Bool
+<<<<<<< HEAD
   case a {
     true: b
     false: is_false(b)
   }
+=======
+  ?f
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // Xor
 // Returns true if both inputs are different
 xor(a: Bool, b: Bool): Bool
+<<<<<<< HEAD
   case a {
     true: is_false(b)
     false: b
   }
+=======
+  ?g
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // Nor
 // Returns true if both inputs are false
 nor(a: Bool, b: Bool): Bool
+<<<<<<< HEAD
   case a {
     true: Bool.false
     false: is_false(b)
   }
+=======
+  ?h
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // Nand
 // Returns false only if both inputs are true
 nand(a: Bool, b: Bool): Bool
+<<<<<<< HEAD
   case a {
     true: case b {
       true: Bool.false
@@ -75,11 +110,32 @@ nand(a: Bool, b: Bool): Bool
     }
     false: Bool.true
   }
+=======
+  ?i
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
 
 // Xnor
 // Returns true if both inputs are identical
 xnor(a: Bool, b: Bool): Bool
+<<<<<<< HEAD
   case a {
     true: b
     false: neg(b)
+=======
+  ?j
+
+
+ex_00: IO<Unit>
+  IO {
+    Tests._00.is_true(is_true)
+    Tests._00.is_false(is_false)
+    Tests._00.neg(neg)
+    Tests._00.and(and)
+    Tests._00.or(or)
+    Tests._00.eql(eql)
+    Tests._00.xor(xor)
+    Tests._00.nor(nor)
+    Tests._00.nand(nand)
+    Tests._00.xnor(xnor)
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
   }
