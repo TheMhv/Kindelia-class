@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Basic Exercises involving Nats
 
 type Nat {
@@ -21,3 +22,35 @@ dec(a: Nat): Nat
 
 is_zero(a: Nat): Bool
   ?a
+=======
+// Basic Exercises involving Nats
+
+type Nat {
+  zero
+  succ(pred: Nat)
+}
+
+// Increment
+// 2 + 1 = 3
+// 0 + 1 = 1
+inc(a: Nat): Nat  
+
+  ?i
+
+// Decrement
+// 2 - 1 = 1
+// 0 - 1 = 0
+dec(a: Nat): Nat
+  ?d
+
+is_zero(a: Nat): Bool
+  ?a
+
+
+ex_03: _
+  IO {
+    Tests._03.inc(inc)
+    Tests._03.dec(dec)
+    Tests._03.is_zero(is_zero)
+  }
+>>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
