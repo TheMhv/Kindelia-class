@@ -14,7 +14,7 @@ is_true(a: Bool): Bool
 // Is false
 // Returns true if input is false
 is_false(a: Bool): Bool
-  case b {
+  case a {
     true: Bool.false
     false: Bool.true
   }
@@ -80,8 +80,11 @@ nor(a: Bool, b: Bool): Bool
 // Returns false only if both inputs are true
 nand(a: Bool, b: Bool): Bool
   case a {
-    true: b
-    false: Bool.false
+    true: case b {
+      true: Bool.false
+      false: Bool.true
+    }
+    false: Bool.true
   }
 
 // Xnor
