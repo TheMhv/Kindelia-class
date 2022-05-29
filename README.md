@@ -1,21 +1,6 @@
-<<<<<<< HEAD
-# Lista de exercícios - Kindelia Foundation
-Repositório com minha lista de exercícios do [Kindelia/class](https://github.com/Kindelia/class).
-
-## Links Úteis:
-### Kindelia Foundation:
-- Site Oficial: [kindelia.org](https://kindelia.org/)
-- A Kind's Devil Thesis: [O Kindelia, o Kind e a HVM](https://youtu.be/wCS4B1bagu0)
-- Youtube: [Kindelia](https://www.youtube.com/c/Kindelia)
-- Twitch: [kindeliaorg](https://www.twitch.tv/kindeliaorg)
-### Repositórios:
-- HVM: [kindelia/HVM](https://github.com/kindelia/HVM)
-- Kind: [kindelia/Kind](https://github.com/kindelia/Kind)
-- Kindelia: [kindelia/Kindelia](https://github.com/Kindelia/Kindelia)
-=======
 # Exercises to Kindelia classes
 
-Exercises for learning [Kind](https://github.com/Kindelia/Kind#readme) language and [HVM](https://github.com/Kindelia/HVM#readme). 
+Exercises for learning [Kind](https://github.com/Kindelia/Kind#readme) language and [HVM](https://github.com/Kindelia/HVM#readme).
 
 ###  Folder Structure
 * **Kind**
@@ -48,7 +33,7 @@ git clone https://github.com/<your-user-name>/<your-repository-name>
 * `cd` on the folder created and make the exercises on folder **Kind**
 
 ### Get Tokens
-The repository [kindelia/class-solutions](https://github.com/Kindelia/class-solutions#readme) 
+The repository [kindelia/class-solutions](https://github.com/Kindelia/class-solutions#readme)
 has instructions about how to participate of monthly distribution tokens.
 
 More info on [Discord](https://discord.gg/kindelia).
@@ -62,4 +47,3 @@ git checkout main
 git rebase upstream/main
 ```
 
->>>>>>> 6fe8a1658d45fd2230432e1ecb0b0e63c2b2d2c3
