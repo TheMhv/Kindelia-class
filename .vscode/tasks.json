@@ -1,27 +1,22 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "kind-run",
-            "type": "shell",
-            "command": "cd ${fileDirname} && kind ${fileBasenameNoExtension} --run",
-            "presentation": {
-              "showReuseMessage": false,
-              "clear": true,
-              "focus": true
-            }
-        },
-        {
-            "label": "kind-check",
-            "type": "shell",
-            "command": "cd ${fileDirname} && kind ${file}",
-            "presentation": {
-              "showReuseMessage": false,
-              "clear": true,
-              "focus": true
-            }
-        }
-    ]
-  }
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "kind-run",
+      "type": "shell",
+      "command": "kind ${fileBasenameNoExtension} --run"
+    },
+    {
+      "label": "kind-check",
+      "type": "shell",
+      "command": "kind ${relativeFile}"
+    },
+    {
+      "label": "kind-build",
+      "type": "shell",
+      "command": "cd web; node build"
+    }
+  ]
+}
