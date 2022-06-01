@@ -25,7 +25,9 @@ type Bits {
 //is_empty(d)      -> Bool.false
 //is_empty(Bits.e) -> Bool.true
 is_empty(b: Bits): Bool
-  ?is_empty
+  case b {
+    e: Bool.true
+  } default Bool.false
 
 
 
@@ -36,7 +38,10 @@ is_empty(b: Bits): Bool
 //tail(c) -> Bits.o(Bits.i(Bits.i(Bits.e)))
 //tail(d) -> Bits.i(Bits.i(Bits.i(Bits.e)))
 tail(b: Bits): Bits
-  ?tail
+  case b {
+    o: b.pred
+    i: b.pred
+  } default Bits.e
 
 
 //Negates all Bits
@@ -46,10 +51,10 @@ tail(b: Bits): Bits
 //notb(c) -> Bits.i(Bits.i(Bits.o(Bits.o(Bits.e))))
 //notb(d) -> Bits.o(Bits.o(Bits.o(Bits.o(Bits.e))))
 notb(b: Bits): Bits
-  ?notb
-
-
-
+  case b {
+    o: notb(Bits.i(b.pred))
+    i: notb(Bits.o(b.pred))
+  } default Bits.e
 
 //Increments a Bit
 
@@ -58,9 +63,10 @@ notb(b: Bits): Bits
 //inc(c) -> Bits.i(Bits.o(Bits.i(Bits.i(Bits.e))))
 //inc(d) -> Bits.o(Bits.o(Bits.o(Bits.o(Bits.i(Bits.e)))))
 inc(b: Bits): Bits
-  ?inc
-
-
+  case b {
+    o: Bits.i(inc(b.pred))
+    i: Bits.o(inc(b.pred))
+  } default Bits.e
 
 //Decrements a Bit
 
@@ -69,10 +75,10 @@ inc(b: Bits): Bits
 //dec(c) -> Bits.i(Bits.i(Bits.o(Bits.i(Bits.e))))
 //dec(d) -> Bits.o(Bits.i(Bits.i(Bits.i(Bits.e))))
 dec(b: Bits): Bits
-  ?dec
-
-
-
+  case b {
+    o: Bits.i(b.pred)
+    i: Bits.o(b.pred)
+  } default Bits.e
 
 //Concatenate two Bits structures
 
@@ -80,7 +86,10 @@ dec(b: Bits): Bits
 //concat(b,c) -> Bits.o(Bits.i(Bits.i(Bits.o(Bits.o(Bits.i(Bits.i(Bits.e)))))))
 //concat(c,d) -> Bits.o(Bits.o(Bits.i(Bits.i(Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))))))
 concat(a: Bits, b: Bits): Bits
-  ?concat
+  case a {
+    o: Bits.o(concat(a.pred, b))
+    i: Bits.i(concat(a.pred, b))
+  } default b
 
 
 
