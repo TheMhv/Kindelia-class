@@ -5,7 +5,7 @@
 //e = empty
 //o = 0
 //i = 1
-type Bits { 
+type Bits {
   e
   o(pred: Bits)
   i(pred: Bits)
@@ -89,7 +89,7 @@ concat(a: Bits, b: Bits): Bits
 //add(a,b) -> Bits.i(Bits.o(Bits.o(Bits.i(Bits.e))))
 //add(b,c) -> Bits.o(Bits.i(Bits.o(Bits.o(Bits.i(Bits.e)))))
 //add(c,d) -> Bits.i(Bits.i(Bits.o(Bits.i(Bits.i(Bits.e)))))
-add(a: Bits, b: Bits): Bits 
+add(a: Bits, b: Bits): Bits
   ?add
 
 
@@ -128,7 +128,7 @@ eql(a: Bits, b: Bits): Bool
 
 reverse_go(b: Bits, acum: Bits): Bits
   ?reverse_go
-  
+
 
 
 //reverse(a) -> Bits.i(Bits.i(Bits.e))
@@ -179,7 +179,7 @@ mul(a: Bits, b: Bits): Bits
 //drop(1, d) -> Bits.i(Bits.i(Bits.i(Bits.e)))
 drop(n: Nat, bs: Bits): Bits
   ?drop
-  
+
 
 
 //Takes n Bits from the structure, starting from the least significative bit
