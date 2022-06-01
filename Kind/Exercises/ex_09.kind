@@ -14,7 +14,9 @@ type Maybe <A: Type> {
 // Ex: zip!!([1,2], ["a","b","c"]) == [{1, "a"}, {2 , "b"}]
 // Ex: zip!!(["a", "b"], [3, 5])   == [{"a", 3}, {2 , "b"}]
 zip<A: Type, B: Type>(xs: List<A>, ys: List<B>): List<Pair<A,B>>
-  ?a
+  case xs ys {
+    cons cons: List.cons<Pair<A, B>>(Pair.new<A, B>(xs.head, ys.head), zip<A, B>(xs.tail, ys.tail))
+  } default List.nil<Pair<A, B>>
 
 // Returns the smallest element of a List
 smallest(xs: List<Nat>): Maybe<Nat>
