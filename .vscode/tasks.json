@@ -6,7 +6,7 @@
     {
       "label": "kind-run",
       "type": "shell",
-      "command": "cd ${fileDirname} && kind ${fileBasenameNoExtension} --run",
+      "command": "cd \"${fileDirname}\" && kind ${fileBasenameNoExtension} --run",
       "presentation": {
         "showReuseMessage": false,
         "clear": true,
@@ -16,7 +16,7 @@
     {
       "label": "kind-check",
       "type": "shell",
-      "command": "cd ${fileDirname} && kind ${relativeFile}",
+      "command": "cd \"${fileDirname}\" && kind ${file}",
       "presentation": {
         "showReuseMessage": false,
         "clear": true,
