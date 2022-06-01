@@ -1,19 +1,19 @@
 // Integer Exercises
 
 // Integers
-type Inte { 
+type Inte {
   neg(num: Neg)
   pos(num: Pos)
 }
 
 // Positive Numbers
-type Pos { 
+type Pos {
   zero
   succ(pred: Pos)
 }
 
 // Negative Numbers
-type Neg { 
+type Neg {
   one
   pred(succ: Neg)
 }
@@ -22,25 +22,25 @@ type Neg {
 // -0 does not exist
 // Increments a negative number by one
 neg_succ(n: Neg): Neg
-  case n { 
+  case n {
     one:  Neg.one
     pred: n.succ
   }
 
-// Functions for negative numbers to help testing 
+// Functions for negative numbers to help testing
 // Do not edit those functions
 
 // Converts Neg to Nat
 neg_to_nat(n: Neg): Nat
-  case n { 
+  case n {
     one:  Nat.succ(Nat.zero)
     pred: Nat.succ(neg_to_nat(n.succ))
   }
-  
+
 // Converts Nat to Neg
 nat_to_neg(n: Nat): Neg
   neg_succ(nat_to_neg_aux(n))
-  
+
   // Aux function for Nat.to_neg
 nat_to_neg_aux(n: Nat): Neg
   case n {
@@ -50,14 +50,14 @@ nat_to_neg_aux(n: Nat): Neg
 
 // Converts Pos to Nat
 pos_to_nat(n: Pos): Nat
-  case n { 
+  case n {
     zero:  Nat.zero
     succ:  Nat.succ(pos_to_nat(n.pred))
   }
 
 // Converts Nat to Pos
 nat_to_pos(n: Nat): Pos
-  case n { 
+  case n {
     zero: Pos.zero
     succ: Pos.succ(nat_to_pos(n.pred))
   }
@@ -73,12 +73,12 @@ neg_show(n: Neg): String
 // Converts Int to String
 inte_show(n: Inte): String
   case n {
-    neg: neg_show(n.num) 
-    pos: pos_show(n.num) 
+    neg: neg_show(n.num)
+    pos: pos_show(n.num)
   }
 
 // Creates an int sign
-// true  = Positive 
+// true  = Positive
 // false = Negative
 int(sign: Bool, num: Nat): Inte
   case sign {
@@ -97,28 +97,73 @@ int(sign: Bool, num: Nat): Inte
 // int(false, 1)     = +0
 // int(false, 2)     = -1
 // int(true,  2)     = +3
-inc(a: Inte): Inte  
-  ?inc
+inc(a: Inte): Inte
+  case a {
+    neg: case a.num {
+      one: Inte.pos(Pos.zero)
+      pred: Inte.neg(a.num.succ)
+    }
+    pos: Inte.pos(Pos.succ(a.num))
+  }
 
 // Decrements an Integer
 // int(false, 1) = -2
 // int(true,  2) = +1
 // int(true,  0) = -1
 dec(a: Inte): Inte
-  ?dec
+  case a {
+    neg: Inte.neg(Neg.pred(a.num))
+    pos: case a.num {
+      zero: Inte.neg(Neg.one)
+      succ: Inte.pos(a.num.pred)
+    }
+  }
 
 // Doubles an Integer
 // int(false, 4) = -8
 // int(false, 1) = -2
 // int(true,  2) = +4
-dbl(a: Inte): Inte 
-  ?dbl
+dbl(a: Inte): Inte
+  case a {
+    neg: case a.num {
+      one: Inte.neg(Neg.pred(Neg.one))
+      pred: dec(dec(dbl(inc(a))))
+    }
+    pos: case a.num {
+      zero: Inte.pos(Pos.zero)
+      succ: inc(inc(dbl(dec(a))))
+    }
+  }
 
 // Adds two Integers
 // int(false, 4) + int(false, 2) = -6
 // int(false, 4) + int(true,  2) = -2
 add(a: Inte, b: Inte): Inte
-  ?add
+  let b.num = b@num
+  case a {
+    neg: case a.num {
+      one: case b {
+        neg: Inte.neg(b.num)
+        pos: Inte.pos(b.num)
+      }
+      pred: add(inc(a), dec(b))
+    }
+    pos: case a.num {
+      zero: case b {
+        neg: Inte.neg(b.num)
+        pos: Inte.pos(b.num)
+      }
+      succ: add(dec(a), inc(b))
+    }
+  }
+
+ex_06: String
+  inte_show(
+    add(
+      Inte.neg(nat_to_neg(4)),
+      Inte.pos(nat_to_pos(2))
+    )
+  )
 
 // Multiplies two Integers
 // int(false, 2) * int(true, 3)  = -6
@@ -176,7 +221,7 @@ hlf(a: Inte): Inte
 // int(false, 8)  / int(true,  4)  = -2
 // int(false, 11) / int(false, 5)  = +2
 // int(true,  10) / int(false, 12) = +0
-div(a: Inte, b: Inte): Inte 
+div(a: Inte, b: Inte): Inte
   ?div
 
 ex_06: IO<Unit>
